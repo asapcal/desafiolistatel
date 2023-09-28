@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: desafio-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "desafio"
+      POSTGRES_USER: "cam"
+      POSTGRES_PASSWORD: "C@m_123"
+    volumes:
+      - db-data:/foo
+
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: desafio-app
+    depends_on:
+      - db
+    environment:
+      DB_HOST: "jdbc:postgresql://localhost:5432/desafio"
+      DB_USER: "cam"
+      DB_PASSWORD: "C@m_123"
+
+    ports:
+      - "8000:8000"
+
+volumes:
+  db-data:
